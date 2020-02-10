@@ -1,0 +1,13 @@
+function [f,g,B,r] = LSE(y,mu)
+ydmu = y./mu;%;
+MAXydmu = max(max(ydmu)); 
+V1=exp(ydmu-MAXydmu);%e^landa*y
+s = sum(V1);
+f = mu*(MAXydmu+log(s));%more acurrate imp of log(s)
+g=V1./s;
+diagg = diag(g);
+ggt=g*g';
+B = (diagg-ggt)./mu;
+[VB,DB] = eig(B);
+dd=diag(DB)
+r=rank(B,1e-18)

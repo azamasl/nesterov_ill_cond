@@ -1,0 +1,20 @@
+function [f,g,B,r] = LSE(y,mu)
+
+ydmu = y./mu;%;
+mydmu = -ydmu;%;[y;-y];
+MAXydmu = max(max(ydmu), max(mydmu)); 
+V1=exp(ydmu-MAXydmu);%e^landa*y
+V2=exp(mydmu-MAXydmu);%e^-landa*y; % more acurate imp of e^z when z is very small
+s = sum(V1+V2);
+f = mu*(MAXydmu+log(s));%more acurrate imp of log(s)
+V1=V1./s;
+V2=V2./s;
+g =V1-V2 ;
+W =V1+V2;
+diagW = diag(W);
+ggt=g*g';
+%normggt = norm(ggt)
+B = (diagW-ggt)./mu;
+[VB,DB] = eig(B);
+dd=diag(DB);
+r=rank(B,1e-18);
